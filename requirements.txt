@@ -1,0 +1,6 @@
+Flask
+werkzeug
+pdfminer.six
+pdfplumber
+spacy
+nameparser

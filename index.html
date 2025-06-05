@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume Skill Extractor</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* Enhanced CSS with interactive background and resume preview */
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Interactive Background */
+    .particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Main container */
+    .container {
+      max-width: 480px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px 35px;
+      border-radius: 16px;
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 1px 8px rgba(0, 0, 0, 0.07);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container.expanded {
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.15),
+        0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      text-align: center;
+      position: relative;
+    }
+
+    h2:after {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-control {
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 15px;
+      transition: all 0.3s ease;
+      background-color: #ffffff;
+      color: #2d3748;
+      font-size: 1rem;
+    }
+
+    .form-control:focus {
+      border-color: #4776E6;
+      box-shadow: 0 0 0 3px rgba(71, 118, 230, 0.25);
+      outline: none;
+      background-color: #ffffff;
+    }
+
+    .form-control:hover {
+      border-color: #cbd5e0;
+    }
+
+    /* File input styling */
+    .form-control[type="file"] {
+      background-color: #ffffff;
+      color: #2d3748;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .form-control[type="file"]::-webkit-file-upload-button {
+      background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      margin-right: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .form-control[type="file"]::-webkit-file-upload-button:hover {
+      background: linear-gradient(90deg, #3d68d8 0%, #7c46d4 100%);
+      transform: translateY(-1px);
+    }
+
+    .form-control[type="file"]::file-selector-button {
+      background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      margin-right: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .form-control[type="file"]::file-selector-button:hover {
+      background: linear-gradient(90deg, #3d68d8 0%, #7c46d4 100%);
+      transform: translateY(-1px);
+    }
+
+    .form-text {
+      color: #718096;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-primary {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 12px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+      border: none;
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(71, 118, 230, 0.35);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: linear-gradient(90deg, #3d68d8 0%, #7c46d4 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(71, 118, 230, 0.45);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 10px rgba(71, 118, 230, 0.4);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.2) 50%,
+          rgba(255, 255, 255, 0) 100%);
+      transition: left 0.7s ease;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .mb-4 {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Resume Preview Section */
+    .resume-preview-container {
+      display: none;
+      margin-top: 30px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 30px;
+      width: 100%;
+      transition: all 0.5s ease;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .resume-preview-container.active {
+      display: block;
+      opacity: 1;
+      height: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .resume-preview {
+      width: 100%;
+      height: 500px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background-color: #f8fafc;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .preview-title {
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .file-icon {
+      margin-right: 8px;
+      color: #4776E6;
+      font-size: 1.2rem;
+    }
+
+    /* Loading animation */
+    .loading-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #4776E6;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Animation for container appearance */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+      .container {
+        padding: 30px 20px;
+        margin-top: 40px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .btn-primary {
+        font-size: 1rem;
+        padding: 10px;
+      }
+
+      .resume-preview {
+        height: 400px;
+      }
+    }
+
+    /* Floating labels animation */
+    .floating-label {
+      position: relative;
+    }
+
+    .floating-label .form-control {
+      height: 56px;
+    }
+
+    .floating-label .form-label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      padding: 1rem 0.75rem;
+      pointer-events: none;
+      border: 1px solid transparent;
+      transform-origin: 0 0;
+      transition: opacity .15s ease-in-out, transform .15s ease-in-out;
+    }
+
+    .floating-label .form-control:focus~.form-label,
+    .floating-label .form-control:not(:placeholder-shown)~.form-label {
+      opacity: .65;
+      transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+    }
+
+    /* Success message */
+    .success-message {
+      display: none;
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .success-message.active {
+      display: block;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container shadow-sm">
+    <h2 class="mb-4 text-center">Resume Skill Extractor</h2>
+    <form method="post" enctype="multipart/form-data" novalidate>
+      <div class="mb-4">
+        <label for="resumeUpload" class="form-label">Upload Your Resume (PDF)</label>
+        <input type="file" id="resumeUpload" name="resume" accept=".pdf" class="form-control" required
+          aria-describedby="resumeHelp" />
+        <div id="resumeHelp" class="form-text">
+          Please upload your resume in PDF format.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" aria-label="Extract Information from Resume">
+        Extract Info
+      </button>
+    </form>
+    <a href="{{ url_for('history') }}" style="
+  display:block;
+  width:100%;
+  margin-top:1rem;
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+  color:white;
+  text-align:center;
+  text-decoration:none;
+  font-weight:600;
+  letter-spacing:0.5px;
+  box-shadow: 0 4px 15px rgba(71, 118, 230, 0.35);
+  transition: all 0.3s ease;
+" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='none'">
+      View Uploaded Resume History
+    </a>
+
+
+
+  </div>
+</body>
+
+</html>
